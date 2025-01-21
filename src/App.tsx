@@ -6,7 +6,7 @@ import { Flex } from "@chakra-ui/react"
 function App() {
   return (
     <>
-      <Flex gap="2" align="center" py="2" px="4">
+      <Flex gap="2" align="center" justify="center" py="2" px="4" pb="8">
         <Image src="/favicon/android-chrome-192x192.png" height="6" />
         <Heading >Hevy Converter</Heading>
       </Flex>
