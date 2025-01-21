@@ -12,6 +12,8 @@ import { createFitbodObject, FitbodRaw } from './fitbodMapping';
 
 const file = fs.readFileSync('./data/FitBodWorkoutExport.csv')
 
+const array = []
+
 parse(file, { delimiter: ",", from_line: 2, }, (err: any, data: string[][]) => {
     data.forEach(row => {
         const fitbodRaw = new FitbodRaw()
@@ -29,11 +31,15 @@ parse(file, { delimiter: ",", from_line: 2, }, (err: any, data: string[][]) => {
         const fitbod = createFitbodObject(fitbodRaw)
         try {
             const strong = convertFitbodToStrong(fitbod)
+            if (!strong.exerciseName)
+                array.push(strong)
             // console.log(strong)
         } catch (err) {
-            console.error((err as any).message)
+            if ((err as any).message)
+                console.error((err as any).message)
         }
     });
+    console.log("errors", array.length)
 })
 
 

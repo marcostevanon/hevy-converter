@@ -11,7 +11,7 @@ export function convertFitbodToStrong(fitbod: Fitbod): Strong {
         throw new Error('skipped - ' + fitbod.exercise)
     }
     if (!exerciseName) {
-        console.log('parsing error', fitbod.exercise)
+        console.log('parsing error -', fitbod.exercise)
     }
     strong.exerciseName = exerciseName
     strong.setOrder = 0 // TODO test this
