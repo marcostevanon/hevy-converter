@@ -50,7 +50,7 @@ export function createFitbodObject(fitbodRaw: FitbodRaw): Fitbod {
         fitbod.reps = reps
     }
 
-    const weight = parseInt(fitbodRaw["Weight(kg)"])
+    const weight = + parseFloat(fitbodRaw["Weight(kg)"]).toFixed(1)
     if (isNaN(weight)) {
         console.log('weight prasing error', fitbodRaw["Weight(kg)"])
         fitbod.weight = 0

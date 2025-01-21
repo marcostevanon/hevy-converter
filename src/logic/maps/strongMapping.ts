@@ -27,3 +27,20 @@ export class StrongRaw {
     "Workout Notes": string = "";
     "RPE": string = "";
 }
+
+export function convertToStrongRaw(strong: Strong): StrongRaw {
+    const strongRaw = new StrongRaw()
+    strongRaw.Date = new Date(strong.date).toISOString().replace('T', ' ').substring(0, 19)
+    strongRaw['Workout Name'] = `"${strong.workoutName}"`
+    strongRaw.Duration = strong.duration.toString()
+    strongRaw['Exercise Name'] = `"${strong.exerciseName}"`
+    strongRaw['Set Order'] = strong.setOrder
+    strongRaw.Weight = strong.weight
+    strongRaw.Reps = strong.reps
+    strongRaw.Distance = strong.distance.toString()
+    strongRaw.Seconds = strong.seconds
+    strongRaw.Notes =  `"${strong.notes}"`
+    strongRaw['Workout Notes'] = `"${strong.workoutNotes}"`
+    strongRaw.RPE = strong.RPE.toString()
+    return strongRaw
+}
