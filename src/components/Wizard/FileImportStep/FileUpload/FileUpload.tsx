@@ -53,6 +53,12 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
 
         const isValid = expectedHeaders.every((header, index) => header === headers[index].trim());
 
+        setFileValid(isValid);
+        if (!isValid) {
+          setImportedDataTemp([]);
+          return;
+        }
+
         const data = lines.slice(1).map((line) => {
           const values = line.split(',');
           return values;
@@ -82,7 +88,6 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
           })
           .filter((item) => item !== undefined);
 
-        setFileValid(isValid);
         setImportedDataTemp(strongData);
       };
       reader.readAsText(file);
@@ -93,31 +98,6 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
     onUpload(importedDataTemp);
     fileUpload.clearFiles();
   };
-
-  //   function jsonToCSV(strongData: StrongRaw[]) {
-  //     const keys = Object.keys(strongData[0]);
-  //     const csvRows = [keys.join(',')];
-
-  //     strongData.forEach((strongObj: any) => {
-  //       const values = keys.map((key) => strongObj[key]);
-  //       csvRows.push(values.join(','));
-  //     });
-
-  //     return csvRows.join('\n');
-  //   }
-
-  //   function downloadCSVFromJSON() {
-  //     const csvContent = jsonToCSV(outputData as StrongRaw[]);
-
-  //     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  //     const link = document.createElement('a');
-  //     const url = URL.createObjectURL(blob);
-  //     link.setAttribute('href', url);
-  //     link.setAttribute('download', 'output.csv');
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //   }
 
   return (
     <Flex direction="column" align="center" justify="center" pt="5" gap="4">
@@ -151,25 +131,11 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
         </Button>
       )}
 
-      {!isFileValid && (
+      {fileUpload.acceptedFiles.length > 0 && !isFileValid && (
         <Text fontSize="md" fontWeight="medium" textAlign="center" color="red.500">
           The imported file isn't a valid Fitbod file ({fileUpload.rejectedFiles.length})
         </Text>
       )}
     </Flex>
-
-    //   <Button
-    //     variant="solid"
-    //     disabled={!fileUpload.acceptedFiles.length || !!outputData}
-    //     onClick={convert}
-    //   >
-    //     Convert Fitbob to Strong <LuRepeat2 />
-    //   </Button>
-
-    //   <br />
-
-    //   <Button variant="outline" disabled={!outputData} onClick={downloadCSVFromJSON}>
-    //     <LuDownload /> Download Strong File
-    //   </Button>
   );
 };
