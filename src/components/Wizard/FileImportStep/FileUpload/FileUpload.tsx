@@ -22,12 +22,14 @@ interface FileUploadProps {
 
 export const FileUpload = ({ onUpload }: FileUploadProps) => {
   const [isFileValid, setFileValid] = useState<boolean>(true);
+  const [importedDataTemp, setImportedDataTemp] = useState<StrongRaw[]>([]);
 
   const fileUpload = useFileUpload({
     maxFiles: 1,
     maxFileSize: 15 * 1024 * 1024,
     accept: 'text/csv',
     onFileAccept: (details) => {
+      // create a function to extract this logic
       const file = details.files[0];
       const reader = new FileReader();
       reader.onload = () => {
@@ -50,53 +52,46 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
         ];
 
         const isValid = expectedHeaders.every((header, index) => header === headers[index].trim());
+
+        const data = lines.slice(1).map((line) => {
+          const values = line.split(',');
+          return values;
+        });
+        const strongData = data
+          .map((row) => {
+            const fitbodRaw = new FitbodRaw();
+            fitbodRaw.Date = row[0].trim();
+            fitbodRaw.Exercise = row[1].trim();
+            fitbodRaw.Reps = row[2].trim();
+            fitbodRaw['Weight(kg)'] = row[3].trim();
+            fitbodRaw['Duration(s)'] = row[4].trim();
+            fitbodRaw['Distance(m)'] = row[5].trim();
+            fitbodRaw.Incline = row[6].trim();
+            fitbodRaw.Resistance = row[7].trim();
+            fitbodRaw.isWarmup = row[8].trim();
+            fitbodRaw.Note = row[9].trim();
+            fitbodRaw.multiplier = row[10].trim();
+            const fitbod = createFitbodObject(fitbodRaw);
+            try {
+              const strong = convertFitbodToStrong(fitbod);
+              // return an object that contains results, skipped and errored items ()
+              return convertToStrongRaw(strong);
+            } catch (err) {
+              console.error((err as any).message);
+            }
+          })
+          .filter((item) => item !== undefined);
+
         setFileValid(isValid);
+        setImportedDataTemp(strongData);
       };
       reader.readAsText(file);
     },
   });
 
   const convert = () => {
-    const file = fileUpload.acceptedFiles[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      const csv = reader.result as string;
-      const lines = csv.split('\n');
-      const data = lines.slice(1).map((line) => {
-        const values = line.split(',');
-        return values;
-      });
-
-      // create a function to extract this logic
-
-      const strongData = data
-        .map((row) => {
-          const fitbodRaw = new FitbodRaw();
-          fitbodRaw.Date = row[0].trim();
-          fitbodRaw.Exercise = row[1].trim();
-          fitbodRaw.Reps = row[2].trim();
-          fitbodRaw['Weight(kg)'] = row[3].trim();
-          fitbodRaw['Duration(s)'] = row[4].trim();
-          fitbodRaw['Distance(m)'] = row[5].trim();
-          fitbodRaw.Incline = row[6].trim();
-          fitbodRaw.Resistance = row[7].trim();
-          fitbodRaw.isWarmup = row[8].trim();
-          fitbodRaw.Note = row[9].trim();
-          fitbodRaw.multiplier = row[10].trim();
-          const fitbod = createFitbodObject(fitbodRaw);
-          try {
-            const strong = convertFitbodToStrong(fitbod);
-            // return an object that contains results, skipped and errored items ()
-            return convertToStrongRaw(strong);
-          } catch (err) {
-            console.error((err as any).message);
-          }
-        })
-        .filter((item) => item !== undefined);
-      onUpload(strongData);
-      fileUpload.clearFiles();
-    };
-    reader.readAsText(file);
+    onUpload(importedDataTemp);
+    fileUpload.clearFiles();
   };
 
   //   function jsonToCSV(strongData: StrongRaw[]) {
@@ -152,7 +147,7 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
 
       {fileUpload.acceptedFiles.length > 0 && isFileValid && (
         <Button width="fit" onClick={convert} disabled={!fileUpload.acceptedFiles.length}>
-          <LuBicepsFlexed /> Import Workouts!
+          <LuBicepsFlexed /> Import {importedDataTemp.length} workouts!
         </Button>
       )}
 
