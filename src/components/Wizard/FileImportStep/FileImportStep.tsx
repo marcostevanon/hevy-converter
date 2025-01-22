@@ -1,12 +1,11 @@
-import { StrongRaw } from "@/logic/maps/strongMapping";
-import { useFileImportStep } from "./useFileImportStep";
+// interface FileImportStepProps {
+//   onUpload: (data: StrongRaw[]) => void;
+// }
 
-interface FileImportStepProps {
-    onImport: (data: StrongRaw[]) => void;
-}
+export const FileImportStep = () => {
+  //   const [data, data1] = useFileImportStep();
 
-export const FileImportStep = ({ onImport }: FileImportStepProps) => {
-    const [data, data1] = useFileImportStep()
+  // onUpload([]);
 
-    return <>-FileImportStep Component-</>
-}
+  return <>-FileImportStep Component-</>;
+};
