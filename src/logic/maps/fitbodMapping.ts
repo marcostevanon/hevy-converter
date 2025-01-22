@@ -34,7 +34,7 @@ export function createFitbodObject(fitbodRaw: FitbodRaw): Fitbod {
     fitbod.isWarmup = fitbodRaw.isWarmup === "true"
     fitbod.note = fitbodRaw.Note
 
-    const date = new Date(fitbodRaw.Date)
+    const date = new Date(fitbodRaw.Date.replace(/-/g, '/'));
     if (date) {
         fitbod.date = date
     } else {

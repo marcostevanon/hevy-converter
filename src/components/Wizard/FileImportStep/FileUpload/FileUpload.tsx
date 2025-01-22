@@ -64,6 +64,8 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
           return values;
         });
         const strongData = data
+          // remove empty lines
+          .filter((row) => row[0] !== '')
           .map((row) => {
             const fitbodRaw = new FitbodRaw();
             fitbodRaw.Date = row[0].trim();
