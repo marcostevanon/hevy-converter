@@ -1,11 +1,10 @@
+import type { ImportedData } from '@/types/importedData';
 import { Flex, Heading, Image } from '@chakra-ui/react';
 import { useState } from 'react';
-import { StrongRaw } from '../../logic/maps/strongMapping';
 import { Stepper } from './Stepper/Stepper';
 
 export const Wizard = () => {
-  const [importedData, setImportedData] = useState<StrongRaw[]>([]);
-  console.log(importedData);
+  const [importedData, setImportedData] = useState<ImportedData[]>([]);
 
   return (
     <>

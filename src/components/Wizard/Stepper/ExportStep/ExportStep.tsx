@@ -1,9 +1,10 @@
-import type { StrongRaw } from '@/logic/maps/strongMapping';
+import { convertToStrongRaw, type StrongRaw } from '@/logic/maps/strongMapping';
+import type { ImportedData } from '@/types/importedData';
 import { Button } from '@chakra-ui/react';
 import { LuDownload } from 'react-icons/lu';
 
 interface ExportStepProps {
-  importedData: StrongRaw[];
+  importedData: ImportedData[];
   restart: () => void;
 }
 
@@ -21,7 +22,7 @@ export const ExportStep = ({ importedData, restart }: ExportStepProps) => {
   }
 
   function downloadCSVFromJSON() {
-    const csvContent = jsonToCSV(importedData);
+    const csvContent = jsonToCSV(importedData.map((val) => convertToStrongRaw(val.strongV1)));
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');

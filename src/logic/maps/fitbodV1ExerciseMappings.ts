@@ -34,7 +34,7 @@ const ignoredExercises: Record<string, string> = {
     "Chin Drop": "",
     "Head Tilt": "",
     "Cable Wrist Curl": "",
-    "Single Arm Preacher Curl": "",
+    // "Single Arm Preacher Curl": "",
 
     // ignored lazy
     "Standing Forward Bend": "",
@@ -42,7 +42,7 @@ const ignoredExercises: Record<string, string> = {
     "Chest Doorway Stretch": "",
 }
 
-export const exerciseMappings: Record<string, string> = {
+export const fitbodV1ExerciseMappings: Record<string, string> = {
     "Barbell Incline Bench Press": "Incline Bench Press (Barbell)",
     "Dumbbell Incline Bench Press": "Incline Bench Press (Dumbbell)",
     "Smith Machine Incline Bench Press": "Incline Bench Press (Smith Machine)",

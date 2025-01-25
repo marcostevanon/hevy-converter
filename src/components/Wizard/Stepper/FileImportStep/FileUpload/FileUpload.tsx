@@ -1,3 +1,7 @@
+import { fitbodV1ExerciseMappings } from '@/logic/maps/fitbodV1ExerciseMappings';
+import { fitBodCsvHeadersV1, FitbodV1 } from '@/models/FitbodV1';
+import { StrongV1 } from '@/models/StrongV1';
+import type { ImportedData } from '@/types/importedData';
 import {
   Button,
   FileUploadClearTrigger,
@@ -9,20 +13,17 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { LuBicepsFlexed, LuFileUp } from 'react-icons/lu';
-import { convertFitbodToStrong } from '../../../../logic/converters/convertFitbodToStrong';
-import { FitbodRaw, createFitbodObject } from '../../../../logic/maps/fitbodMapping';
-import { StrongRaw, convertToStrongRaw } from '../../../../logic/maps/strongMapping';
-import { CloseButton } from '../../../ui/close-button';
-import { FileInput } from '../../../ui/file-upload';
-import { InputGroup } from '../../../ui/input-group';
+import { CloseButton } from '../../../../ui/close-button';
+import { FileInput } from '../../../../ui/file-upload';
+import { InputGroup } from '../../../../ui/input-group';
 
 interface FileUploadProps {
-  onUpload: (data: StrongRaw[]) => void;
+  onUpload: (data: ImportedData[]) => void;
 }
 
 export const FileUpload = ({ onUpload }: FileUploadProps) => {
   const [isFileValid, setFileValid] = useState<boolean>(true);
-  const [importedDataTemp, setImportedDataTemp] = useState<StrongRaw[]>([]);
+  const [importedData, setImportedData] = useState<ImportedData[]>([]);
 
   const fileUpload = useFileUpload({
     maxFiles: 1,
@@ -37,67 +38,55 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
         const lines = csv.split('\n');
         const headers = lines[0].split(',');
 
-        const expectedHeaders = [
-          'Date',
-          'Exercise',
-          'Reps',
-          'Weight(kg)',
-          'Duration(s)',
-          'Distance(m)',
-          'Incline',
-          'Resistance',
-          'isWarmup',
-          'Note',
-          'multiplier',
-        ];
+        const expectedHeaders = fitBodCsvHeadersV1.split(',');
 
         const isValid = expectedHeaders.every((header, index) => header === headers[index].trim());
 
         setFileValid(isValid);
         if (!isValid) {
-          setImportedDataTemp([]);
+          setImportedData([]);
           return;
         }
 
-        const data = lines.slice(1).map((line) => {
-          const values = line.split(',');
-          return values;
-        });
-        const strongData = data
+        const imported = lines
+          .slice(1)
           // remove empty lines
+          .map((line) => line.split(','))
           .filter((row) => row[0] !== '')
           .map((row) => {
-            const fitbodRaw = new FitbodRaw();
-            fitbodRaw.Date = row[0].trim();
-            fitbodRaw.Exercise = row[1].trim();
-            fitbodRaw.Reps = row[2].trim();
-            fitbodRaw['Weight(kg)'] = row[3].trim();
-            fitbodRaw['Duration(s)'] = row[4].trim();
-            fitbodRaw['Distance(m)'] = row[5].trim();
-            fitbodRaw.Incline = row[6].trim();
-            fitbodRaw.Resistance = row[7].trim();
-            fitbodRaw.isWarmup = row[8].trim();
-            fitbodRaw.Note = row[9].trim();
-            fitbodRaw.multiplier = row[10].trim();
-            const fitbod = createFitbodObject(fitbodRaw);
-            try {
-              const strong = convertFitbodToStrong(fitbod);
-              // return an object that contains results, skipped and errored items ()
-              return convertToStrongRaw(strong);
-            } catch (err) {
-              console.error((err as any).message);
-            }
-          })
-          .filter((item) => item !== undefined);
+            const fitbodV1 = new FitbodV1();
+            fitbodV1.date = row[0].trim();
+            fitbodV1.exercise = row[1].trim();
+            fitbodV1.reps = row[2].trim();
+            fitbodV1.weight = row[3].trim();
+            fitbodV1.duration = row[4].trim();
+            fitbodV1.distance = row[5].trim();
+            fitbodV1.incline = row[6].trim();
+            fitbodV1.resistance = row[7].trim();
+            fitbodV1.isWarmup = row[8].trim();
+            fitbodV1.note = row[9].trim();
+            fitbodV1.multiplier = row[10].trim();
 
-        setImportedDataTemp(strongData);
+            const strongV1 = new StrongV1();
+            strongV1.importAsFitbodV1(fitbodV1, fitbodV1ExerciseMappings);
+
+            return {
+              id: crypto.randomUUID(),
+              fitbodV1,
+              strongV1,
+            };
+
+            // TODO test this and add few tests with edge cases (date, conversion)
+          });
+
+        setImportedData(imported);
       };
       reader.readAsText(file);
     },
   });
 
   const convert = () => {
-    onUpload(importedDataTemp);
+    onUpload(importedData);
     fileUpload.clearFiles();
   };
 
@@ -129,7 +118,7 @@ export const FileUpload = ({ onUpload }: FileUploadProps) => {
 
       {fileUpload.acceptedFiles.length > 0 && isFileValid && (
         <Button width="fit" onClick={convert} disabled={!fileUpload.acceptedFiles.length}>
-          <LuBicepsFlexed /> Import {importedDataTemp.length} workouts!
+          <LuBicepsFlexed /> Import workouts!
         </Button>
       )}
 

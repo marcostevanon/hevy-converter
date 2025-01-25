@@ -3,7 +3,7 @@ Project created with: https://medium.com/@nedopaka/setup-a-react-vite-project-wi
 Fitbod to Hevy CSV converter
 
 Developed with the current apps versions:
-Fitbod: 6.48.0 (9587)
+Fitbod: 6.49.0 (9883)
 Hevy: 2.0.17 (1335712)
 Strong: 5.15.23 (7825) (used for CSV schema)
 

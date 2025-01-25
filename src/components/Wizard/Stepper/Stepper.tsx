@@ -1,14 +1,14 @@
 import { StepsCompletedContent, StepsContent, StepsItem, StepsList } from '@/components/ui/steps';
-import type { StrongRaw } from '@/logic/maps/strongMapping';
+import type { ImportedData } from '@/types/importedData';
 import { StepsRootProvider, useSteps } from '@chakra-ui/react';
 import { type Dispatch, type SetStateAction } from 'react';
-import { EditPage } from '../EditPage/EditPage';
-import { ExportStep } from '../ExportStep/ExportStep';
-import { FileUpload } from '../FileImportStep/FileUpload/FileUpload';
+import { EditStep } from './EditStep/EditStep';
+import { ExportStep } from './ExportStep/ExportStep';
+import { FileUpload } from './FileImportStep/FileUpload/FileUpload';
 
 interface StepperProps {
-  importedData: StrongRaw[];
-  setImportedData: Dispatch<SetStateAction<StrongRaw[]>>;
+  importedData: ImportedData[];
+  setImportedData: Dispatch<SetStateAction<ImportedData[]>>;
 }
 
 export const Stepper = ({ importedData, setImportedData }: StepperProps) => {
@@ -18,7 +18,7 @@ export const Stepper = ({ importedData, setImportedData }: StepperProps) => {
     count: 3,
   });
 
-  const onUpload = (data: StrongRaw[]) => {
+  const onUpload = (data: ImportedData[]) => {
     setImportedData(data);
     steps.goToNextStep();
   };
@@ -46,7 +46,7 @@ export const Stepper = ({ importedData, setImportedData }: StepperProps) => {
         <FileUpload onUpload={onUpload} />
       </StepsContent>
       <StepsContent index={1}>
-        <EditPage importedData={importedData} exportCsv={exportCsv} restart={restart} />
+        <EditStep importedData={importedData} exportCsv={exportCsv} restart={restart} />
       </StepsContent>
       <StepsContent index={2}>
         <ExportStep importedData={importedData} restart={restart} />
