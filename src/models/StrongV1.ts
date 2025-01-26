@@ -78,17 +78,19 @@ export class StrongV1 {
 
   importAsFitbodV1(fitbodV1: FitbodV1, exercisesMapping: any) {
     this._date = fitbodV1.date;
-    // this._workoutName = // TODO generate a workout
+    // TODO generate a workout
+    this._workoutName = 'test 1';
     this._duration = fitbodV1.duration;
     this._exerciseName = exercisesMapping[fitbodV1.exercise!];
-    // this._setOrder = // TODO generate setOrder
+    // TODO generate setOrder
+    this._setOrder = 1;
     this._weight = fitbodV1.weight;
     this._reps = fitbodV1.reps;
     this._distance = fitbodV1.distance;
-    // this._seconds = // TODO ??
+    // this._seconds = // TODO ignore
     this._notes = fitbodV1.note;
-    // this._workoutNotes = // TODO ?? ignore?
-    // this._RPE = // TODO ignore?
+    // this._workoutNotes = // TODO ignore
+    // this._RPE = // TODO ignore
   }
 
   isExerciseValid() {

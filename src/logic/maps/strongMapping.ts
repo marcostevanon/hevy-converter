@@ -17,33 +17,32 @@ export class Strong {
 
 export class StrongRaw {
   'Date': string = '';
-  'Workout Name': string = '';
-  'Duration': string = '';
+  'Workout Name': string = 'Imported Workout';
+  'Duration': string = '0s';
   'Exercise Name': string = '';
   'Set Order': number = 0;
   'Weight': number = 0;
   'Reps': number = 0;
-  'Distance': string = '';
+  'Distance': number = 0;
   'Seconds': number = 0;
   'Notes': string = '';
   'Workout Notes': string = '';
   'RPE': string = '';
 }
 
-//  TODO remove !
 export function convertToStrongRaw(strong: StrongV1): StrongRaw {
   const strongRaw = new StrongRaw();
   strongRaw.Date = new Date(strong.date!).toISOString().replace('T', ' ').substring(0, 19);
-  strongRaw['Workout Name'] = `"${strong.workoutName}"`;
-  strongRaw.Duration = strong.duration!.toString();
+  if (strong.workoutName) strongRaw['Workout Name'] = `"${strong.workoutName}"`;
+  if (strong.duration) strongRaw.Duration = `${strong.duration}s`;
   strongRaw['Exercise Name'] = `"${strong.exerciseName}"`;
   strongRaw['Set Order'] = strong.setOrder!;
   strongRaw.Weight = strong.weight!;
   strongRaw.Reps = strong.reps!;
-  strongRaw.Distance = strong.distance!.toString();
+  strongRaw.Distance = strong.distance!;
   strongRaw.Seconds = strong.seconds!;
-  strongRaw.Notes = `"${strong.notes}"`;
-  strongRaw['Workout Notes'] = `"${strong.workoutNotes}"`;
-  strongRaw.RPE = strong.RPE!.toString();
+  if (strong.notes) strongRaw.Notes = `"${strong.notes}"`;
+  if (strong.workoutNotes) strongRaw['Workout Notes'] = `"${strong.workoutNotes}"`;
+  if (strong.RPE) strongRaw.RPE = `"${strong.RPE}"`;
   return strongRaw;
 }

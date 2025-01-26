@@ -9,7 +9,10 @@ interface EditStepProps {
 
 export const EditStep = ({ importedData, exportCsv, restart }: EditStepProps) => {
   return (
-    <div>
+    <>
+      <Button onClick={exportCsv}>Export</Button>
+      <Button onClick={restart}>Restart</Button>
+
       <Table.Root size="sm">
         <Table.Header>
           <Table.Row>
@@ -85,11 +88,6 @@ export const EditStep = ({ importedData, exportCsv, restart }: EditStepProps) =>
             ))}
         </Table.Body>
       </Table.Root>
-
-      {/* importedData: {importedData.length} */}
-      <br />
-      <Button onClick={exportCsv}>Export</Button>
-      <Button onClick={restart}>Restart</Button>
-    </div>
+    </>
   );
 };
