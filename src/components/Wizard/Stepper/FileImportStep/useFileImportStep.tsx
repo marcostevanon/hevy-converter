@@ -56,7 +56,7 @@ export const useFileImportStep = ({ onUpload }: UseFileImportStepProps) => {
         const strongV1 = new StrongV1();
         strongV1.importAsFitbodV1(fitbodV1, fitbodV1ExerciseMappings);
 
-        return { id: crypto.randomUUID(), fitbodV1, strongV1 };
+        return { id: Math.random().toString(36).substring(2, 11), fitbodV1, strongV1 };
 
         // TODO test this and add few tests with edge cases (date, conversion)
       });

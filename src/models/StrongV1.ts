@@ -73,7 +73,6 @@ export class StrongV1 {
   get RPE(): number | null {
     return this._RPE;
   }
-
   //#endregion
 
   importAsFitbodV1(fitbodV1: FitbodV1, exercisesMapping: any) {
