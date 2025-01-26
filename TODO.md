@@ -3,11 +3,8 @@ TODO
 Priority
 - Maybe try to add tome test to the app with jest, at least some unit tests
 - Fix the conversion with the following
-  - create a name for the workout
   - add the duration cell and add an “s” after the duration, convert in second
-  - add a formula to calculate the set order value 
-  - remove RPE value from the column
-  - create a setOrder logic
+  - add a formula to calculate the set order value (not necessary, it works anyway)
 
 Features
 - refactoring code to have a separation like: source schema, conversion mapping with exercises, output schema.

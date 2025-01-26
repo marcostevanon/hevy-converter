@@ -13,7 +13,7 @@ export const Wizard = () => {
         <Heading>Hevy Converter</Heading>
       </Flex>
 
-      <Flex align="center" justify="center" px="4">
+      <Flex align="center" justify="center" p="4">
         <Stepper importedData={importedData} setImportedData={setImportedData} />
       </Flex>
     </>

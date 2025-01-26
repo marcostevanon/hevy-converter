@@ -1,7 +1,7 @@
-import { Wizard } from "./components/Wizard/Wizard"
+import { Wizard } from './components/Wizard/Wizard';
 
 function App() {
-  return (<Wizard />)
+  return <Wizard />;
 }
 
-export default App
+export default App;

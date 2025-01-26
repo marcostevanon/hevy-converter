@@ -1,10 +1,10 @@
-import { StepsCompletedContent, StepsContent, StepsItem, StepsList } from '@/components/ui/steps';
+import { StepsContent, StepsItem, StepsList } from '@/components/ui/steps';
 import type { ImportedData } from '@/types/importedData';
 import { StepsRootProvider, useSteps } from '@chakra-ui/react';
 import { type Dispatch, type SetStateAction } from 'react';
 import { EditStep } from './EditStep/EditStep';
 import { ExportStep } from './ExportStep/ExportStep';
-import { FileUpload } from './FileImportStep/FileUpload/FileUpload';
+import { FileImportStep } from './FileImportStep/FileImportStep';
 
 interface StepperProps {
   importedData: ImportedData[];
@@ -12,11 +12,7 @@ interface StepperProps {
 }
 
 export const Stepper = ({ importedData, setImportedData }: StepperProps) => {
-  const steps = useSteps({
-    linear: true,
-    defaultStep: 0,
-    count: 3,
-  });
+  const steps = useSteps({ linear: true, defaultStep: 0, count: 3 });
 
   const onUpload = (data: ImportedData[]) => {
     setImportedData(data);
@@ -27,31 +23,28 @@ export const Stepper = ({ importedData, setImportedData }: StepperProps) => {
     steps.goToNextStep();
   };
 
-  const restart = () => {
+  const reset = () => {
     steps.resetStep();
     setImportedData([]);
   };
 
   return (
     <StepsRootProvider value={steps} size="sm" maxWidth="lg">
-      <StepsList>
+      <StepsList pb="4">
         <StepsItem index={0} title="Import" />
         <StepsItem index={1} title="Edit data" />
         <StepsItem index={2} title="Export" />
       </StepsList>
 
       <StepsContent index={0}>
-        {/* // TODO refactor these components */}
-        {/* <FileImportStep onUpload={onUpload} /> */}
-        <FileUpload onUpload={onUpload} />
+        <FileImportStep onUpload={onUpload} />
       </StepsContent>
       <StepsContent index={1}>
-        <EditStep importedData={importedData} exportCsv={exportCsv} restart={restart} />
+        <EditStep importedData={importedData} exportCsv={exportCsv} restart={reset} />
       </StepsContent>
       <StepsContent index={2}>
-        <ExportStep importedData={importedData} restart={restart} />
+        <ExportStep importedData={importedData} restart={reset} />
       </StepsContent>
-      <StepsCompletedContent>All steps are complete!</StepsCompletedContent>
     </StepsRootProvider>
   );
 };
